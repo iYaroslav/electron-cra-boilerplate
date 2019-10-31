@@ -2,61 +2,97 @@
   "name": "my-app",
   "description": "Electron + Create React App + Electron Builder",
   "version": "0.1.0",
+  "license": "BSD",
   "private": true,
   "author": {
     "name": "Your Name",
     "email": "your.email@domain.com",
     "url": "https://your-website.com"
   },
+  "homepage": "./",
+  "main": "public/electron.js",
+  "scripts": {
+    "start-react": "cross-env PORT=3333 BROWSER=none rescripts start",
+    "start-electron": "wait-on http://localhost:3333 && nodemon --watch ./public --exec \"cross-env DEBUG=* electron .\"",
+    "start": "concurrently \"yarn start-react\" \"yarn start-electron\" --kill-others",
+    "postinstall": "electron-builder install-app-deps",
+    "prebuild": "rescripts build",
+    "build": "electron-builder"
+  },
+  "rescripts": [
+    "env"
+  ],
+  "dependencies": {
+    "debug": "^4.1.1",
+    "electron-better-ipc": "^0.6.0",
+    "electron-is-dev": "^1.0.1",
+    "usb": "^1.6.0"
+  },
+  "devDependencies": {
+    "@rescripts/cli": "^0.0.13",
+    "@rescripts/rescript-env": "^0.0.11",
+    "concurrently": "^5.0.0",
+    "cross-env": "^6.0.3",
+    "electron": "^6.0.8",
+    "electron-builder": "^21.2.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.2.0",
+    "node-sass": "^4.13.0",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.18.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-scripts": "^3.2.0",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3",
+    "wait-on": "^3.2.0"
+  },
   "build": {
+    "asar": false,
+    "asarUnpack": [
+      "res/file.json"
+    ],
     "appId": "com.my-website.my-app",
     "productName": "MyApp",
     "copyright": "Copyright © 2019 ${author}",
+    "artifactName": "my-app.${ext}",
+    "buildDependenciesFromSource": true,
+    "detectUpdateChannel": false,
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "target": "zip"
     },
     "files": [
       "build/**/*",
       "node_modules/**/*"
     ],
+    "portable": {
+      "requestExecutionLevel": "user"
+    },
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "nsis": {
+      "perMachine": false,
+      "oneClick": true
     }
   },
-  "dependencies": {
-    "electron-is-dev": "^1.0.1",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5"
-  },
-  "homepage": "./",
-  "main": "public/electron.js",
-  "scripts": {
-    "start": "rescripts start",
-    "build": "rescripts build",
-    "test": "rescripts test",
-    "eject": "react-scripts eject",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "postinstall": "electron-builder install-app-deps",
-    "preelectron-pack": "yarn build",
-    "electron-pack": "build -mw"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "bracketSpacing": true,
+    "printWidth": 120
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "devDependencies": {
-    "@rescripts/cli": "^0.0.10",
-    "@rescripts/rescript-env": "^0.0.5",
-    "concurrently": "^4.1.0",
-    "electron": "^4.0.6",
-    "electron-builder": "^20.38.5",
-    "typescript": "^3.3.3333",
-    "wait-on": "^3.2.0"
-  }
+    "cover 99.5%"
+  ]
 }
